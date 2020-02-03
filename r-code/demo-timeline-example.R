@@ -36,7 +36,7 @@ rbl %>%
   mutate(`Net Score` = cumsum(`Event Score`)) %>% 
   ggplot(aes(x = `Game Time`, y = `Net Score`)) + 
   geom_point() + 
-  geom_line() +
+  geom_step() +
   # geom_label_repel(aes(label = `Event Type`, fill = `Game Situtaiton`)) +
   theme_bw() +
   scale_x_continuous(breaks = seq(0, 90, by = 15), labels = seq(0, 90, by = 15)) +
@@ -58,7 +58,7 @@ rbl %>%
    mutate(`Net Score` = cumsum(`Event Score`)) %>% 
    ggplot(aes(x = `Game Time`, y = `Net Score`)) + 
    geom_point() + 
-   geom_line() +
+   geom_step() +
    geom_label_repel(aes(label = `Event Type`, fill = `Game Situtaiton`),
                     point.padding = .5, box.padding = .65, label.padding = .1) +
    theme_bw() +
@@ -83,7 +83,7 @@ rbl %>%
    mutate(`Net Score` = cumsum(`Event Score`)) %>% 
    ungroup() %>% 
    ggplot(aes(x = `Game Time`, y = `Net Score`, color = `Player Name`)) + 
-   geom_line() +
+   geom_step() +
    # geom_label_repel(aes(label = `Player Name`),
    #                  nudge_x = 1, na.rm = T) +
    directlabels::geom_dl(aes(label = `Player Name`), 
