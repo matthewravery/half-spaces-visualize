@@ -14,6 +14,7 @@ library(tidyverse)
 library(ggrepel)
 library(viridis)
 library(directlabels)
+library(stringr)
 
 pad_time <- function(tb){
     
@@ -40,14 +41,18 @@ ui <- fluidPage(
             checkboxGroupInput("players","Select players for cumulative score plot:",
                         choices = NULL),
             selectInput("eventplayer", "Select player for event plot:",
-                        choices = NULL)
+                        choices = NULL),
+            radioButtons("labs", "Label Major Events for Cumulative Score Plot?",
+                         c("Yes", "No"),
+                         selected = "Yes")
             
         ),
 
         mainPanel(
             tabsetPanel(type = "tabs",
                         tabPanel("Timeline Plot", plotOutput("timelinePlot")),
-                        tabPanel("Event Plot", plotOutput("eventPlot"))
+                        tabPanel("Event Plot", plotOutput("eventPlot")),
+                        tabPanel("Cumulative Team Score", plotOutput("cumulativePlot"))
                 
             )
            
@@ -158,6 +163,50 @@ server <- function(input, output, session) {
                   panel.grid.minor = element_blank()) +
             facet_grid(`Player Name` ~ .) +
             scale_fill_viridis(discrete = T, begin = .35)
+        
+        
+    })
+    
+    output$cumulativePlot <- renderPlot({
+        
+        if (is.null(input$datasheet))
+            return(NULL)
+        
+        rbl <- read_csv(input$datasheet$datapath) %>%
+            pad_time() %>%
+            arrange(`Game Time`) %>%
+            mutate(`Net Score` = cumsum(`Event Score`))
+        
+        
+        rblstepc <- bind_rows(old = rbl, 
+                             new = rbl %>%  mutate(`Net Score` = lag(`Net Score`)),
+                             .id = "source") %>%
+            filter(!is.na(`Net Score`)) %>% 
+            arrange(`Game Time`, source)
+        
+        
+        labtab <- rbl %>% 
+            filter(abs(`Event Score`) > 1) %>% 
+            mutate(newlab = map2_chr(`Player Name`, `Event Type`, stringr::str_c, sep = " - "))
+        
+        if(input$labs == "No") labtab <- slice(labtab, 0)
+        
+        rbl %>% 
+            ggplot(aes(x = `Game Time`, y = `Net Score`)) + 
+            geom_step() +
+            geom_ribbon(aes(x = `Game Time`, ymin = 0, ymax = `Net Score`), 
+                        data = rblstep, alpha = .1) +
+            theme_bw() +
+            geom_label_repel(aes(label = newlab, fill = `Game Situtaiton`),
+                             point.padding = .15, data = labtab, nudge_y = 12.5) +
+            scale_x_continuous(breaks = seq(0, 90, by = 15), labels = seq(0, 90, by = 15)) +
+            scale_y_continuous(breaks = seq(-10, 212, by = 5)) +
+            theme(axis.line.y=element_blank(),
+                  axis.line.x =element_blank(),
+                  legend.position = "top",
+                  panel.grid.minor = element_blank()) +
+            scale_color_brewer(palette = "Set1", guide = "none") +
+            scale_fill_brewer(palette = "Set1", guide = "none")
         
         
     })
