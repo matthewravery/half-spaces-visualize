@@ -20,10 +20,10 @@ pad_time <- function(tb){
 }
 
 
-playersofinterest <- c("Adams", "Upamecano", "Werner")
+playersofinterest <- c("Adams", "Llanez", "Cannon")
 # playersofinterest <- c("Upamecano")
 
-rbl <- read_sheet("https://docs.google.com/spreadsheets/d/1PAw_zTJpZ7FbQwEIKIw8xc4cst7dCGXvPT0SNnUfK-8/edit#gid=0", sheet = "Game Log") %>% 
+rbl <- read_sheet("https://docs.google.com/spreadsheets/d/17pyYilWp9xN3AxTpVLEug-0j9mWhWRNFCLac_BxEGO0/edit#gid=0", sheet = "Game Log") %>% 
   pad_time() %>% 
   filter(`Player Name` %in% playersofinterest) %>% 
   arrange(`Player Name`, `Game Time`) %>%
