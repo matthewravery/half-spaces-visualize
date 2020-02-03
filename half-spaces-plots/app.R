@@ -195,7 +195,7 @@ server <- function(input, output, session) {
             ggplot(aes(x = `Game Time`, y = `Net Score`)) + 
             geom_step() +
             geom_ribbon(aes(x = `Game Time`, ymin = 0, ymax = `Net Score`), 
-                        data = rblstep, alpha = .1) +
+                        data = rblstepc, alpha = .1) +
             theme_bw() +
             geom_label_repel(aes(label = newlab, fill = `Game Situtaiton`),
                              point.padding = .15, data = labtab, nudge_y = 12.5) +

@@ -5,6 +5,6 @@ account: mavery
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 1721260
-bundleId: 2770509
+bundleId: 2770550
 url: https://mavery.shinyapps.io/half-spaces-plots/
-when: 1580702285.12
+when: 1580703708.78782
