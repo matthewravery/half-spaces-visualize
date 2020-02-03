@@ -57,12 +57,10 @@ rbl %>%
                    point.padding = .15, data = labtab, nudge_y = 12.5) +
     scale_x_continuous(breaks = seq(0, 90, by = 15), labels = seq(0, 90, by = 15)) +
   scale_y_continuous(breaks = seq(-10, 212, by = 5)) +
-  # coord_cartesian(xlim = c(0, 100), ylim = c(-1, 10)) +
   theme(axis.line.y=element_blank(),
         axis.line.x =element_blank(),
         legend.position = "top",
         panel.grid.minor = element_blank()) +
-  # coord_cartesian(xlim = c(0, 110)) +
   scale_color_brewer(palette = "Set1", guide = "none") +
   scale_fill_brewer(palette = "Set1")
 
